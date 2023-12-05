@@ -14,8 +14,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned concatenate(unsigned x, unsigned y);
-
 int main(void)
 {
     int sum;
@@ -35,7 +33,8 @@ int main(void)
     {
         int digitOne = -999;
         int digitTwo;
-        char digitsCombined[4];
+        char sDigitOne[8];
+        char sDigitTwo[4];
         
         for (int i = 0; i < strlen(fileData); i++)
         {
@@ -43,20 +42,21 @@ int main(void)
             {
                 if (digitOne == -999)
                 {
-                    digitOne = fileData[i];
+                    digitOne = fileData[i] - '0';
                 }
                 
-                digitTwo = fileData[i];
+                digitTwo = fileData[i] - '0';
 
             }
         }
 
-        char buf1[sizeof(digitOne)];
-        sprintf(buf1, "%d", digitOne);
+        sprintf(sDigitOne, "%d", digitOne);
+        sprintf(sDigitTwo, "%d", digitTwo);
 
-        strcat(digitsCombined, buf1);
-        puts(digitsCombined);
-        
+        strcat(sDigitOne, sDigitTwo);
+        int result;
+        sscanf(sDigitOne, "%d", &result);
+        sum += result;
     }
-    
+    printf("Result is: %d\n", sum);
 }
