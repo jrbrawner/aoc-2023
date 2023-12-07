@@ -2,51 +2,63 @@
 #include <fstream>
 #include <string>
 #include <ctype.h>
+#include <list>
+#include <bits/stdc++.h>
 
-void PartOne();
+bool HasOnlyDigits(std::string s);
 std::string CheckString(std::string numberString);
+void PartOne();
 
 int main()
 {
     std::ifstream inputFile;
-    inputFile.open("input.txt");
-
     std::string fileInput;
+    std::string stringNumbers[9] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    std::string numbers[9] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
     int sum = 0;
     
+    inputFile.open("input.txt");
     if (inputFile.is_open())
     {
         while (inputFile.good())
         {
             inputFile >> fileInput;
-            std::string buffer;
-            std::string numbers[10] = {};
-
-            for (int i = 0; i < fileInput.length(); i++)
+            std::list<int> numberPositions = {};
+            
+            //check line for all occurences of one-nine, get position
+            for(std::string number : stringNumbers)
             {
-                buffer += fileInput[i];
-                std::string temp = CheckString(buffer);
-                if (temp != "0")
+                int found = fileInput.find(number);
+
+                if(found != std::string::npos)
                 {
-                    numbers->append(temp);
-                    buffer.clear();
-                }
-                
-                if (isdigit(fileInput[i]))
-                {
-                    int number = fileInput[i] - '0';
-                    numbers->append(std::to_string(number));
+                    numberPositions.push_back(found);
                 }
             }
+            //check line for all occurences of 1-9, get position 
+            for(std::string number : numbers)
+            {
+                int found = fileInput.find(number);
 
-            std::string digitsCombined = numbers[0] + numbers->back();
-            std::cout << numbers->back() << "\n";
-            //sum += std::stoi(digitsCombined);
-            //std::cout << digitsCombined << "\n";
+                if(found != std::string::npos)
+                {
+                    numberPositions.push_back(found);
+                }
+            }
+            //sort list of positions, retrieve smallest and biggest position
+            numberPositions.sort();
+            int low = numberPositions.front();
+            int high = numberPositions.back();
+
+            std::string calcString;
+            //get low position number
+            char result = fileInput[low];
+            
         }
     }
     inputFile.close();
-    std::cout << "The result is: " << sum << "\n";
+    
 }
 
 std::string CheckString(std::string numberString)
@@ -61,6 +73,10 @@ std::string CheckString(std::string numberString)
     if (numberString.find("eight") != std::string::npos) return "8";
     if (numberString.find("nine") != std::string::npos) return "9";
     return "0";
+}
+
+bool HasOnlyDigits(const std::string s){
+  return s.find_first_not_of( "0123456789" ) == std::string::npos;
 }
 
 void PartOne()
