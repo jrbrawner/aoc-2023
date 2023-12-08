@@ -7,7 +7,7 @@
 
 bool HasOnlyDigits(std::string s);
 std::string CheckString(std::string numberString);
-void PartOne();
+bool InList(std::string find, std::string *array);
 
 int main()
 {
@@ -54,66 +54,107 @@ int main()
             std::string calcString;
             //get low position number
             char result = fileInput[low];
+
+            if (isdigit(result))
+            {
+                std::string temp(1, result);
+                calcString.append(temp);
+            }
+            else
+            {
+                std::string buffer(1, result);
+                bool found = false;
+                int counter = 1;
+
+                while (found == false)
+                {
+                    
+                    char nextChar = fileInput[low+counter];
+                    std::string stringNextChar(1, nextChar);
+                    buffer.append(stringNextChar);
+
+                    if (InList(buffer, stringNumbers) == true)
+                    {
+                        found = true;
+                        calcString.append(CheckString(buffer));
+                        break;
+                    }
+                    counter += 1;
+                    
+                }  
+            }
+
+            //get high position number
+            result = fileInput[high];
+
+            if (isdigit(result))
+            {
+                std::string temp(1, result);
+                calcString.append(temp);
+            }
+            else
+            {
+                std::string buffer(1, result);
+                bool found = false;
+                int counter = 1;
+
+                while (found == false)
+                {
+                    char nextChar = fileInput[high+counter];
+                    std::string stringNextChar(1, nextChar);
+                    buffer.append(stringNextChar);
+                    std::cout << buffer << "\n";
+                    if (InList(buffer, stringNumbers) == true)
+                    {
+                        found = true;
+                        calcString.append(CheckString(buffer));
+                        break;
+                    }
+                    counter += 1;
+                }  
+            }
+            std::cout << calcString << "\n";
+            sum += std::stoi(calcString);
             
         }
     }
     inputFile.close();
+
+    std::cout << "The result is: " << sum << "\n";
+
     
 }
 
 std::string CheckString(std::string numberString)
 {
-    if (numberString.find("one") != std::string::npos) return "1";
-    if (numberString.find("two") != std::string::npos) return "2";
-    if (numberString.find("three") != std::string::npos) return "3";
-    if (numberString.find("four") != std::string::npos) return "4";
-    if (numberString.find("five") != std::string::npos) return "5";
-    if (numberString.find("six") != std::string::npos) return "6";
-    if (numberString.find("seven") != std::string::npos) return "7";
-    if (numberString.find("eight") != std::string::npos) return "8";
-    if (numberString.find("nine") != std::string::npos) return "9";
-    return "0";
+    if (numberString == "one") return "1";
+    if (numberString == "two") return "2";
+    if (numberString == "three") return "3";
+    if (numberString == "four") return "4";
+    if (numberString == "five") return "5";
+    if (numberString == "six") return "6";
+    if (numberString == "seven") return "7";
+    if (numberString == "eight") return "8";
+    if (numberString == "nine") return "9";
+    return 0;
 }
 
 bool HasOnlyDigits(const std::string s){
   return s.find_first_not_of( "0123456789" ) == std::string::npos;
 }
 
-void PartOne()
+bool InList(std::string find, std::string *array)
 {
-    std::ifstream inputFile;
-    inputFile.open("input.txt");
-
-    std::string fileInput;
-
-    int sum = 0;
-
-    if (inputFile.is_open())
+    bool found = false;
+    for (int i = 0; i <= sizeof(array); i++)
     {
-        while (inputFile.good())
+        if (find == array[i])
         {
-
-            inputFile >> fileInput;
-
-            int digitOne = -999;
-            int digitTwo;
-            
-            for (int i = 0; i < fileInput.length(); i++)
-            {
-                if (isdigit(fileInput[i]))
-                {
-                    if (digitOne == -999)
-                    {
-                        digitOne = fileInput[i] - '0';
-                    }
-                    digitTwo = fileInput[i] - '0';
-                }
-            }
-            std::string stringDigitsCombined = std::to_string(digitOne) + std::to_string(digitTwo);
-            sum += std::stoi(stringDigitsCombined);
-            
+            found = true;
+            break;
         }
+        
     }
-    inputFile.close();
-    std::cout << "The result is: " << sum << "\n";
+    
+    return found;
 }
