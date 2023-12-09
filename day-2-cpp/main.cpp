@@ -17,9 +17,10 @@ class GameResult
         int id;
         bool possible = true;
 
-        int redLimit = 12;
-        int greenLimit = 13;
-        int blueLimit = 14;
+        int blueSmallestOccurence = 0;
+        int greenSmallestOccurence = 0;
+        int redSmallestOccurence = 0;
+
 
         void init(string lineInput)
         {
@@ -105,18 +106,20 @@ class GameResult
                 }
             }
             total = stoi(stringTotal);
-            cout << total << "\n";
+            
             for (string color : colors)
             {
                 if (gameScore.find(color) != -1)
                 {
-                    if (color == "blue" && total > blueLimit) possible = false;
-                    if (color == "green" && total > greenLimit) possible = false;
-                    if (color == "red" && total > redLimit) possible = false;
+                    if (color == "blue" && total > blueSmallestOccurence) blueSmallestOccurence = total;;
+                    if (color == "green" && total > greenSmallestOccurence) greenSmallestOccurence = total;
+                    if (color == "red" && total > redSmallestOccurence) redSmallestOccurence = total;
                 }
             }
 
         }
+
+
 
 
 };
@@ -145,13 +148,10 @@ int main()
 
     for(GameResult result : results)
     {
-        if (result.possible == true)
-        {
-            sum += result.id;
-        }
+        int powerOfCubes = result.blueSmallestOccurence * result.redSmallestOccurence * result.greenSmallestOccurence;
+        sum += powerOfCubes;
     }
     
-
     cout << "The result is: " << sum << "\n";
 }
 
