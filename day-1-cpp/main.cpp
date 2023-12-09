@@ -18,13 +18,14 @@ int main()
 
     int sum = 0;
     
-    inputFile.open("input.txt");
+    inputFile.open("test.txt");
     if (inputFile.is_open())
     {
         while (inputFile.good())
         {
             inputFile >> fileInput;
             std::list<int> numberPositions = {};
+            
             
             //check line for all occurences of one-nine, get position
             for(std::string number : stringNumbers)
@@ -36,20 +37,35 @@ int main()
                     numberPositions.push_back(found);
                 }
             }
+            //// need to account for multiple occurences of one digit
             //check line for all occurences of 1-9, get position 
             for(std::string number : numbers)
             {
                 int found = fileInput.find(number);
-
-                if(found != std::string::npos)
+                while (found != -1)
                 {
                     numberPositions.push_back(found);
+                    std::cout << fileInput << "\n";
+                    fileInput.erase(found, 1);
+                    found = fileInput.find(number);
+                    
                 }
+                
             }
+            /*
+            for(int num : numberPositions)
+            {
+                std::cout << num << "\n";
+            }
+
+            */
+            
             //sort list of positions, retrieve smallest and biggest position
             numberPositions.sort();
             int low = numberPositions.front();
             int high = numberPositions.back();
+
+            
 
             std::string calcString;
             //get low position number
@@ -90,6 +106,7 @@ int main()
             if (isdigit(result))
             {
                 std::string temp(1, result);
+                
                 calcString.append(temp);
             }
             else
@@ -103,7 +120,7 @@ int main()
                     char nextChar = fileInput[high+counter];
                     std::string stringNextChar(1, nextChar);
                     buffer.append(stringNextChar);
-                    std::cout << buffer << "\n";
+
                     if (InList(buffer, stringNumbers) == true)
                     {
                         found = true;
@@ -113,7 +130,7 @@ int main()
                     counter += 1;
                 }  
             }
-            std::cout << calcString << "\n";
+           
             sum += std::stoi(calcString);
             
         }
