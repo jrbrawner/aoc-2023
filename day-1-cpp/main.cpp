@@ -18,7 +18,7 @@ int main()
 
     int sum = 0;
     
-    inputFile.open("test.txt");
+    inputFile.open("input.txt");
     if (inputFile.is_open())
     {
         while (inputFile.good())
@@ -31,10 +31,10 @@ int main()
             for(std::string number : stringNumbers)
             {
                 int found = fileInput.find(number);
-
-                if(found != std::string::npos)
+                while (found != -1)
                 {
                     numberPositions.push_back(found);
+                    found = fileInput.find(number, found+1);
                 }
             }
             //// need to account for multiple occurences of one digit
@@ -45,27 +45,14 @@ int main()
                 while (found != -1)
                 {
                     numberPositions.push_back(found);
-                    std::cout << fileInput << "\n";
-                    fileInput.erase(found, 1);
-                    found = fileInput.find(number);
-                    
+                    found = fileInput.find(number, found+1);
                 }
-                
             }
-            /*
-            for(int num : numberPositions)
-            {
-                std::cout << num << "\n";
-            }
-
-            */
             
             //sort list of positions, retrieve smallest and biggest position
             numberPositions.sort();
             int low = numberPositions.front();
             int high = numberPositions.back();
-
-            
 
             std::string calcString;
             //get low position number
@@ -130,8 +117,9 @@ int main()
                     counter += 1;
                 }  
             }
-           
+            std::cout << calcString << "\n";
             sum += std::stoi(calcString);
+            
             
         }
     }
